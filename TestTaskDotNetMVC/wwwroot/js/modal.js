@@ -123,20 +123,10 @@ $(document).ready(function () {
       currentStep++;
       updateModalContent();
     } else {
-      $.ajax({
-        url: "/Home/Submit",
-        type: "POST",
-        data: JSON.stringify({Answers: userData}),
-        contentType: "application/json",
-        success: function (response) {
-          console.log(response.data)
-          alert(response.message);
-          $("#modalOverlay, #formModal").fadeOut();
-        },
-        error: function (error) {
-          alert("Something went wrong. Please try again.");
-        }
-      });
+      const queryParams = userData
+        .map((answer, index) => `answers[${index}]=${encodeURIComponent(answer)}`)
+        .join("&");
+      window.location.href = `/Home/Success?${queryParams}`;
     }
   });
 

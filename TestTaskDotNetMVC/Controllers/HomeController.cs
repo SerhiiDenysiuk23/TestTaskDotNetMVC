@@ -18,18 +18,26 @@ namespace TestTaskDotNetMVC.Controllers
             return View();
         }
 
-        [HttpPost]
-        public IActionResult Submit([FromBody] FormModel model)
+        [HttpGet]
+        public IActionResult Success([FromQuery] ICollection<ICollection<string>> Answers)
         {
             try
             {
-                var result = model.Answers;
+                if (Answers == null || Answers.Count == 0)
+                {
+                    return View("Error", new { message = "No answers provided." });
+                }
 
-                return Ok(new { success = true, message = "Data submitted successfully!", data = result});
+                foreach (var answer in Answers)
+                {
+                    Console.WriteLine(answer);
+                }
+
+                return View("Success", Answers);
             }
             catch (Exception ex)
             {
-                return BadRequest(new { success = false, message = "An error occurred.", details = ex.Message });
+                return View("Error", new { message = ex.Message });
             }
         }
 
